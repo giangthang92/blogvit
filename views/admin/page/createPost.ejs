@@ -1,0 +1,46 @@
+<% layout('admin/layout') -%>
+<!-- <base href="http://localhost:3000/"> -->
+<link rel="stylesheet" href="../../../public/css/avatar.css">
+<div>
+  <form method="POST" action="create" enctype="multipart/form-data">
+    <div class="card-body">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" name="description" placeholder="Enter description">
+      </div>
+      
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea class="form-control" rows="10" name="content" placeholder="Write your content ...."></textarea>
+      </div>
+
+    
+      <div class="form-group">
+        <label for="image" class="col-sm-2 col-form-label">Image</label>
+        <div class="ml-auto mr-auto img-fluid">
+          <div class="profile-pic ml-auto mr-auto">
+            <label class="-label" for="file">
+            <span class="glyphicon glyphicon-camera"></span>
+            <span>Change image</span>
+            </label>
+          <input id="file" type="file" name="image" onchange="loadFile(event)"/>
+          <img src="../../../public/upload/avatar.jpg" id="output" name="image"></div>
+        </div>
+      </div>
+    <!-- /.card-body -->
+
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+ <script>
+   var loadFile = function(event) {
+	var image = document.getElementById('output');
+	image.src = URL.createObjectURL(event.target.files[0]);
+};
+ </script>

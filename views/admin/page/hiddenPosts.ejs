@@ -1,0 +1,186 @@
+<% layout('admin/layout') -%>
+    <base href="http://localhost:3000/">
+    <!-- Default box -->
+    <form name="container-form" action="admin/hiddenPost/actionList" method="POST">
+        <div class="d-flex mb-3 align-items-center">
+            <div class="form-check ml-4">
+                <input class="form-check-input" type="checkbox" value="" id="check-all">
+                <label class="form-check-label" for="check-all">
+                  All
+                </label>
+            </div>
+            <select class="form-control form-control-sm text-left ml-3" name="action" style="width: 120px" required>
+                <option value="">-- Action --</option>
+                <option value="restore">Restore</option>
+                <option value="delete">Delete</option>
+                <!-- <option>3</option> -->
+            </select>
+            <button class="btn btn-primary btn-sm ml-3 btn-action " disabled> Apply </button>
+        </div>
+            <div class="card">
+            <div class="card-body p-0">
+                <table class="table table-striped projects">
+                    <thead>
+                        <tr>
+                            <th style="width: 2%" >
+                            </th>
+                            <th style="width: 4%" class="text-center" >
+                                #
+                            </th>
+                            <th style="width: 40%">
+                                Hidden Post List
+                                <a class="btn btn-danger btn-sm ml-4"  href="admin/posts/1">
+                                    <i class="fas fa-trash">
+                                    </i>    
+                                    Post List (<%= countPost %>)
+                                </a>
+                            </th>
+                            <th style="width: 20%">
+                                Hidden by
+                            </th>
+                            <th>
+                                Writer
+                            </th>
+                            <!-- <th style="width: 8%" class="text-center">
+                                Role
+                            </th> -->
+                            <!-- <th style="width: 20%">
+                            </th> -->
+                        </tr>
+                    </thead>
+                <tbody>
+                    <% post.forEach(function(post, i = 1) { %>
+                    <tr>
+                        <td>
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" name="postIds[]" value="<%= post._id %>">
+                            </div>
+                        </td>
+                        <td class="text-center">
+                        <%= ++i %>
+                        </td>
+                        <td>
+                            <a>
+                                <%= post.title %>
+                            </a>
+                            <br/>
+                            <small>
+                                <%= post.deletedAt %>
+                            </small>
+                            <br/>
+                            <small>  <%= post.description %> </small>
+                        </td>
+                        <td>
+                        <a> <%= post.deletedBy %>  </a>
+                        </td>
+                        <td >   
+                            <%= post.userId.username %>
+                        </td>
+                        <!-- <td class="project-state">
+                            <div class="external-event bg-success ui-draggable ui-draggable-handle" style="position: relative;"><%= post.image %></div>
+                        </td> -->
+                        <td class="project-actions text-right">
+                            <a class="btn btn-info btn-sm btn-restore" data-id="<%= post._id %>" href="#">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+                                Restore
+                            </a>
+                            <a class="btn btn-danger btn-sm" data-target="#delete-post" data-toggle="modal" data-id="<%= post._id %>" href="">
+                                <i class="fas fa-trash">
+                                </i>
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+        <div id="delete-post" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Delete this post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <p>Are you want to delete?</p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" id="btn-delete-post" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    
+    <form action="" name="restore-form" method="POST"></form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var restoreBtn = $('.btn-restore');
+            var restoreForm = document.forms['restore-form'];
+            // var containerForm = document.forms['container-form'];
+            var containerForm = $('form[name="container-form"]')
+            var checkAll = $('#check-all');
+            var checkBoxAllItem = $('input[name="postIds[]"]');
+            var actionBtn = $('.btn-action');
+        
+            restoreBtn.click(function(e) {
+                e.preventDefault();
+                var postId = $(this).data('id')
+                restoreForm.action = 'admin/hiddenPost/' + postId + '?_menthod=PATCH';
+                restoreForm.submit();
+            });
+
+            checkAll.change(function(){
+                isCheckedAll = $(this).prop('checked');
+                checkBoxAllItem.prop('checked', isCheckedAll);
+                toggleBtnActiom();
+            });
+
+            checkBoxAllItem.change(function(){
+                isCheckedAll = checkBoxAllItem.length === $('input[name="postIds[]"]:checked').length;
+                checkAll.prop('checked', isCheckedAll);
+                toggleBtnActiom();
+            });
+
+            function toggleBtnActiom (){
+                var checkedCount = $('input[name="postIds[]"]:checked').length;
+                if(checkedCount > 0){
+                    actionBtn.removeAttr('disabled');
+                }else {
+                    actionBtn.addAttr('disabled');
+                }
+            };
+
+            // containerForm.on('submit', function(e) {
+            //     var isSubmitable = !actionBtn.hasClass('disabled');
+            //     if(!isSubmitable) {
+            //         e.preventDefault();
+            //     }
+            // });
+        });
+    </script>
+    <form method="POST" name="confirm-delete"></form>    
+    <script> 
+        var postId;
+        var deletePost = document.forms['confirm-delete'];
+        document.addEventListener('DOMContentLoaded',function(){       
+        $('#delete-post').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        postId = button.data('id');
+        });
+        var btndelete = document.getElementById('btn-delete-post')
+        btndelete.onclick = function () {
+        deletePost.action = "admin/hiddenPost/" + postId + "?_method=DELETE";
+        deletePost.submit();
+        }
+        });
+     </script>
+    
+    <!-- /.card -->
+   

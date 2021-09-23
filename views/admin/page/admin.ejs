@@ -1,0 +1,188 @@
+<% layout('admin/layout') -%>
+
+
+<link rel="stylesheet" href="../../../public/css/avatar.css">
+<base href="http://localhost:3000/">
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+          <div class="card-body box-profile">
+            <div class="text-center">
+              <img class="profile-user-img img-fluid img-circle"
+                   src="../../../public/upload/<%= admin.avatar %>"
+                   alt="User profile picture">
+            </div>
+
+            <h3 class="profile-username text-center"><%- admin.name %></h3>
+
+            <p class="text-muted text-center"><%- admin.email %></p>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+        <!-- About Me Box -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">About Me</h3>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <strong><i class="fas fa-book mr-1"></i>Name</strong>
+
+                <p class="text-muted"> 
+                  <%= admin.name %>
+                 </p>
+            
+
+            <hr>
+
+            <strong><i class="fas fa-map-marker-alt mr-1"></i> Email</strong>
+
+            <p class="text-muted"><%= admin.email %></p>
+            <hr>
+
+            <strong><i class="far fa-file-alt mr-1"></i> Phone</strong>
+
+            <p class="text-muted"><%= admin.phone %></p>
+          </div>
+        </div>
+      </div>
+      <!-- /.col -->
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-header p-2">
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">My posts</a></li>
+                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings profile</a></li>
+             
+            </ul>
+          </div>
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="active tab-pane" id="activity">
+
+                <!-- PostList -->
+
+                <% posts.forEach(function(post) { %>
+                  <div class="post">
+                    <div class="user-block">
+                        <h1> <%= post.title %> </h1>
+                        <a href="http://localhost:3000/post/edit/<%= post._id %>" class="float-right btn-tool"><i class="fas fa-edit mr-1"></i></a>
+                        <a href="" class="float-right btn-tool" data-toggle="modal" data-id="<%= post._id %>" data-target="#delete-post"> <i class="fas fa-times"></i></a>
+                      </span>
+                      <span class="description"><%= post.createdAt %></span>
+                    </div>
+                    <!-- /.user-block -->
+                    <p>
+                      <%= post.description %>
+                    </p>
+                    <p>
+                      <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
+                      <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
+                      </span>
+                    </p>
+                  </div>
+                <% }); %> 
+
+
+                <div>
+                  <a class="btn btn-block btn-primary" href="post/create" role="button">Create new post</a>
+                </div>
+
+                <div id="delete-post" class="modal" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Delete this post</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Are you want to delete?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" id="btn-delete-post" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                 <form method="POST" name="confirm-delete"></form>
+                <script> 
+                  var postId;
+                  var deletePost = document.forms['confirm-delete'];
+                  document.addEventListener('DOMContentLoaded',function(){
+                    $('#delete-post').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);
+                    postId = button.data('id');
+                  });
+                  var btndelete = document.getElementById('btn-delete-post')
+                  btndelete.onclick = function () {
+                    deletePost.action = "post/" + postId + "?_method=DELETE";
+                    deletePost.submit();
+                  }
+                  });
+                  </script>
+
+              </div>
+              
+              <div class="tab-pane" id="settings">
+                <form  method="POST" action="user/edit?_method=PUT" class="form-horizontal" enctype="multipart/form-data">
+                  <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="name" name="name" value="<%= admin.name %>">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="email" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="email" name="email" value="<%= admin.email %>">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="phone" name="phone" value="<%= admin.phone %>">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
+                    <div class="ml-auto mr-auto img-fluid">
+                      <div class="profile-pic ml-auto mr-auto">
+                        <label class="-label" for="file">
+                        <span class="glyphicon glyphicon-camera"></span>
+                        <span>Change Avatar</span>
+                        </label>
+                      <input id="file" type="file" name="avatar" onchange="loadFile(event)"/>
+                      <img src="../../../public/upload/<%= admin.avatar %>" id="output" name="avatar"></div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="offset-sm-2 col-sm-10">
+                      <button type="submit" class="tn btn-block btn-primary" >Edit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+var loadFile = function(event) {
+var image = document.getElementById('output');
+image.src = URL.createObjectURL(event.target.files[0]);
+};
+</script>
