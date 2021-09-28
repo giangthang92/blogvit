@@ -20,10 +20,15 @@ const commentSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'comments',
   },
-  replyComments: {
-    type: Array,
-    ref: 'comments',
-  },
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+});
+
+commentSchema.virtual('comments', {
+  ref: 'comments',
+  foreignField: 'parentId',
+  localField: '_id',
 });
 
 module.exports = mongoose.model('comments', commentSchema);

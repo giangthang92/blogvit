@@ -29,81 +29,93 @@
             <div class="d-flex flex-column col-md-8">
                 <div class="coment-bottom bg-white p-2 px-4" >
                     <form method="POST" class="d-flex flex-row add-comment-section mt-4 mb-4" action="comment/<%= post._id %>/comment">
-                        <img class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
+                        <% if (user) { %>
+                          <img class="img-fluid img-responsive rounded-circle mr-2" src="../../../public/upload/<%=user.avatar%>" width="38">
+                          <% } else { %>
+                          <img class="img-fluid img-responsive rounded-circle mr-2" src="../../../public/upload/avatar.jpg" width="38">
+                          <% } %>
                         <input type="text" class="form-control mr-3" name="content" id="content" placeholder="Add comment">
                         <button class="btn btn-primary" type="submit">Comment</button>
                     </form>
                     <% comment.forEach(function(comment, index){ %>
+                        <form name="replyComment<%=comment._id%>" action="" method="POST">
                         <div class="container mt-5">
                             <div class="d-flex justify-content-center row">
-                                <div class="col-md-8">
-                                    <div class="d-flex flex-column comment-section" id="myGroup">
-                                        <div class="bg-white p-2">
-                                            <div class="d-flex flex-row user-info"><img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40">
-                                                <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">Marry Andrews</span><span class="date text-black-50">Shared publicly - Jan 2020</span></div>
+                                <div class="col-md-8 coment-bottom ">
+                                    <div class="d-flex flex-column coment-bottom" id="myGroup">
+                                        <div class="bg-white p-2" >
+                                            <div class="d-flex flex-row user-info"><img class="rounded-circle" src="../../../public/upload/<%= comment.userId.avatar %>" width="40">
+                                                <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name"><%= comment.userId.name %></span><span class="date text-black-50"><%= comment.createdAt %></span></div>
                                             </div>
                                             <div class="mt-2">
-                                                <p class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                <p class="comment-text"><%= comment.content %></p>
                                             </div>
                                         </div>
+                                        
                                         <div class="bg-white p-2">
-                                            <div class="d-flex flex-row fs-12">
-                                                <div class="like p-2 cursor"><i class="fa fa-thumbs-o-up"></i><span class="ml-1">Like</span></div>
-                                                <div class="like p-2 cursor action-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1-<%=index%>" href="#collapse-1"><i class="fa fa-commenting-o"></i><span class="ml-1">Comment</span></div>
-                                                <div class="like p-2 cursor action-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-2-<%=index%>" href="#collapse-2"><i class="fa fa-share"></i><span class="ml-1">Share</span></div>
-                                            </div>
+                                          <div class="d-flex flex-row fs-12">
+                                              <div class="like p-2 cursor"><i class="fa fa-thumbs-o-up"></i><span class="ml-1">Like</span></div>
+                                              <div class="like p-2 cursor action-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1-<%=index%>" href="#collapse-1-<%=index%>"><i class="fa fa-commenting-o"></i><span class="ml-1">Reply</span></div>
+                                              <div class="like p-2 cursor action-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-2-<%=index%>" href="#collapse-2-<%=index%>"><i class="fa fa-share"></i><span class="ml-1">Share</span></div>
+                                          </div>         
                                         </div>
+                                       
                                         <div id="collapse-1-<%=index%>" class="bg-light p-2 collapse" data-parent="#myGroup">
-                                            <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40"><textarea class="form-control ml-1 shadow-none textarea"></textarea></div>
-                                            <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="button">Post comment</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button></div>
-                                        </div>
+                                          <% if(user) { %>
+                                            <div class="form control d-flex flex-row align-items-start">
+                                                <img class="rounded-circle" src="../../../public/upload/<%=user.avatar%>" width="40">
+                                                <input name="content" id="content" type="text" class="form-control ml-1 shadow-none textarea"></input>
+                                            </div>
+                                          <% } else { %>
+                                            <div class="form-control d-flex flex-row align-items-start">
+                                                <img class="rounded-circle" src="../../../public/upload/avatar.jpg" width="40">
+                                                <input name="content" id="content" type="text" class="form-control ml-1 shadow-none textarea"></input>
+                                            </div>
+                                         <% }%>
+                                          <div class="mt-2 text-right">
+                                            <button type="submit" class="btn btn-primary btn-sm shadow-none replyComment-btn"  data-id="<%=comment._id%>">Post comment</button>
+                                            <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" data-toggle="collapse" data-target="#collapse-1-<%=index%>" type="button">Cancel</button></div>
+                                         </div>
+                                         
                                         <div id="collapse-2-<%=index%>" class="bg-light p-2 collapse" data-parent="#myGroup">
-                                            <div class="d-flex flex-row align-items-start"><i class="fa fa-facebook border p-3 rounded mr-1"></i><i class="fa fa-twitter border p-3 rounded mr-1"></i><i class="fa fa-linkedin border p-3 rounded mr-1"></i><i class="fa fa-instagram border p-3 rounded mr-1"></i><i class="fa fa-dribbble border p-3 rounded mr-1"></i> <i class="fa fa-pinterest-p border p-3 rounded mr-1"></i> </div>
+                                          <div class="d-flex flex-row align-items-start"><i class="fa fa-facebook border p-3 rounded mr-1"></i><i class="fa fa-twitter border p-3 rounded mr-1"></i><i class="fa fa-linkedin border p-3 rounded mr-1"></i><i class="fa fa-instagram border p-3 rounded mr-1"></i><i class="fa fa-dribbble border p-3 rounded mr-1"></i> <i class="fa fa-pinterest-p border p-3 rounded mr-1"></i> </div>
+                                        </div>
+                                        
+                                   <% comment.comments.forEach(function(e){ %>
+                                    <div class="bg-light p-2 mt-1">
+                                        <div class="d-flex flex-row user-info ml-5"><img class="rounded-circle" src="../../../public/upload/<%= e.userId.avatar %>" width="40">
+                                            <div class="d-flex flex-column justify-content-start ml-1"><span class="d-block font-weight-bold name"><%= e.userId.name %></span><span class="date text-black-50"><%= e.createdAt %></span></div>
+                                        </div>
+                                        <div class="mt-2 ml-5">
+                                            <p class="comment-text"><%= e.content %></p>
                                         </div>
                                     </div>
+                                    </form>
+                                   <% }); %>
+                                  </div>
                                 </div>
                             </div>
                         </div>
                    
                     <% }); %>
+                
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- <div class="container mt-5">
-        <div class="d-flex justify-content-center row">
-            <div class="col-md-8">
-                <div class="d-flex flex-column comment-section" id="myGroup">
-                    <form method="POST" class="d-flex flex-row add-comment-section mt-4 mb-4" action="comment/<%= post._id %>/comment">
-                        <img class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
-                        <input type="text" class="form-control mr-3" name="content" id="content" placeholder="Add comment">
-                        <button class="btn btn-primary" type="submit">Comment</button>
-                    </form>
-                    <div class="bg-white p-2">
-                        <div class="d-flex flex-row user-info"><img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40">
-                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">Marry Andrews</span><span class="date text-black-50">Shared publicly - Jan 2020</span></div>
-                        </div>
-                        <div class="mt-2">
-                            <p class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white p-2">
-                        <div class="d-flex flex-row fs-12">
-                            <div class="like p-2 cursor"><i class="fa fa-thumbs-o-up"></i><span class="ml-1">Like</span></div>
-                            <div class="like p-2 cursor action-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1"><i class="fa fa-commenting-o"></i><span class="ml-1">Comment</span></div>
-                            <div class="like p-2 cursor action-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-2" href="#collapse-2"><i class="fa fa-share"></i><span class="ml-1">Share</span></div>
-                        </div>
-                    </div>
-                    <div id="collapse-1" class="bg-light p-2 collapse" data-parent="#myGroup">
-                        <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40"><textarea class="form-control ml-1 shadow-none textarea"></textarea></div>
-                        <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="button">Post comment</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button></div>
-                    </div>
-                    <div id="collapse-2" class="bg-light p-2 collapse" data-parent="#myGroup">
-                        <div class="d-flex flex-row align-items-start"><i class="fa fa-facebook border p-3 rounded mr-1"></i><i class="fa fa-twitter border p-3 rounded mr-1"></i><i class="fa fa-linkedin border p-3 rounded mr-1"></i><i class="fa fa-instagram border p-3 rounded mr-1"></i><i class="fa fa-dribbble border p-3 rounded mr-1"></i> <i class="fa fa-pinterest-p border p-3 rounded mr-1"></i> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
+   <script>
+       
+        document.addEventListener('DOMContentLoaded', function(){
+        var replyCommentBtn = $('.replyComment-btn');
+        replyCommentBtn.click(function(e) {
+            e.preventDefault();
+            var parentCommentId = $(this).data('id');
+            var name= 'replyComment' + parentCommentId;
+            var replyComment = document.forms[name];
+            replyComment.action = 'comment/replyComment/' + parentCommentId;
+            replyComment.submit();
+            });
+        });
+   </script>
    

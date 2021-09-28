@@ -193,9 +193,9 @@
             function toggleBtnActiom (){
                 var checkedCount = $('input[name="postIds[]"]:checked').length;
                 if(checkedCount > 0){
-                    actionBtn.removeAttr('disabled');
+                    actionBtn.attr('disabled', false);
                 }else {
-                    actionBtn.addAttr('disabled');
+                    actionBtn.attr('disabled', true);
                 }
             };
 

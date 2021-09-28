@@ -1,5 +1,7 @@
 const express = require('express');
 
+// const { ObjectId } = require('mongoose').Types;
+
 const { Post, Comment } = require('../models/Index');
 
 const router = express.Router();
@@ -9,7 +11,7 @@ router.get('/post/:id', async (req, res, next) => {
     const { user } = req.session;
     const { id } = req.params;
     const post = await Post.findOne({ _id: id }).populate('userId');
-    const comment = await Comment.find({ postId: id }).populate('userId');
+    const comment = await Comment.find({ postId: id }).populate('userId').populate({ path: 'comments', populate: { path: 'userId' } });
     if (!post) {
       res.json({ status: 400, message: 'error' });
       return;
