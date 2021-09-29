@@ -25,6 +25,7 @@ const commentSchema = new Schema({
   toJSON: { virtuals: true },
 });
 
+// Get reply comment with parentId
 commentSchema.virtual('comments', {
   ref: 'comments',
   foreignField: 'parentId',

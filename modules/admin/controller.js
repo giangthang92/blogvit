@@ -1,19 +1,22 @@
 const { User, Post } = require('../../models/Index');
 
-// const { ObjectId } = require('mongoose').Types;
-
 module.exports = {
+
+  // render admin GET '/admin'
   renderAdmin: async (req, res) => {
     const userInfor = req.session.user._id;
     const user = await User.findById(userInfor);
     const post = await Post.find({ userId: userInfor });
     res.render('./admin/page/admin.ejs', { admin: user, posts: post });
   },
+
+  // render userList GET "/admin/userList"
   userList: async (req, res) => {
     const user = await User.find().populate('posts');
     res.render('./admin/page/userList', { admin: user });
   },
 
+  // edit user by admin PUT "/admin/editUser/:id"
   updateUser: async (req, res, next) => {
     const { id } = req.params;
     if (!req.file) {
@@ -48,12 +51,14 @@ module.exports = {
     }
   },
 
+  // render page edit user GET "/admin/editUser/:id"
   renderUpdateUser: async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(id);
     res.render('./admin/page/editUser.ejs', { admin: user });
   },
 
+  // render Post and pagination GET "/admin/posts/:page"
   getPosts: async (req, res, next) => {
     try {
       const page = parseInt(req.params.page, 10) || 1;
@@ -70,6 +75,7 @@ module.exports = {
     }
   },
 
+  // render hidden posts GET "/admin/hiddenPostList"
   hiddenPostList: async (req, res, next) => {
     try {
       const hiddenPost = await Post.findDeleted().populate('userId');
@@ -80,6 +86,7 @@ module.exports = {
     }
   },
 
+  // hidden post DELETE "/admin/posts/:id"
   hiddenPost: async (req, res, next) => {
     const userDelete = req.session.user.username;
     try {
@@ -91,6 +98,7 @@ module.exports = {
     }
   },
 
+  // delete post DELETE "/admin/hiddenPost/:id"
   forceDelete: async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -101,6 +109,7 @@ module.exports = {
     }
   },
 
+  // restore post POST "/admin/hiddenPost/:id"
   restorePost: async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -111,6 +120,7 @@ module.exports = {
     }
   },
 
+  // delete & restore by btn action in page "hiddenPost"
   formActionBtnHiddenPost: async (req, res, next) => {
     switch (req.body.action) {
       case 'restore':
@@ -134,6 +144,7 @@ module.exports = {
     }
   },
 
+  // hidden more posts by btn action on page "posts"
   formActionBtnPost: async (req, res, next) => {
     switch (req.body.action) {
       case 'hidden':

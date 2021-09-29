@@ -63,6 +63,15 @@ module.exports = {
     }
   },
 
+  logout: async (req, res, next) => {
+    try {
+      await req.session.destroy();
+      res.redirect('/index/1');
+    } catch (error) {
+      next(error);
+    }
+  },
+
   renderUser: async (req, res) => {
     const userInfor = req.session.user._id;
     const { role } = req.session.user;

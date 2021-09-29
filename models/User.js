@@ -47,12 +47,14 @@ const UserSchema = new Schema({
 },
 { timestamps: true, toJSON: { virtuals: true } });
 
+// Get posts with userId
 UserSchema.virtual('posts', {
   ref: 'posts',
   foreignField: 'userId',
   localField: '_id',
 });
 
+// hash and comparePassword
 // eslint-disable-next-line func-names
 UserSchema.pre('save', function (next) {
   const user = this;

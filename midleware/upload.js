@@ -15,7 +15,8 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     if ((file.mimetype === 'image/bmp'
         || file.mimetype === 'image/png'
-        || file.mimetype === 'image/jpeg')) {
+        || file.mimetype === 'image/jpeg'
+        || file.mimetype === 'image/gif')) {
       cb(null, true);
     } else {
       return cb(new Error('Only image are allowed!'));

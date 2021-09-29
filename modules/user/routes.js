@@ -11,6 +11,7 @@ const {
   updateUser,
   renderUser,
   // getUser,
+  logout,
 } = require('./controller');
 
 router.get('/register', formRegister);
@@ -20,4 +21,5 @@ router.get('/login', formLogin);
 router.get('/profile', renderUser);
 router.post('/login', login);
 router.put('/edit', checkLogin, upload.single('avatar'), updateUser);
+router.get('/logout', logout);
 module.exports = router;

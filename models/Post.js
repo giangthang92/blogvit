@@ -40,6 +40,7 @@ const postSchema = new Schema({
   ],
 });
 
+// Plugin sort delete to hidden posts
 postSchema.plugin(mongooseDelete, {
   deletedAt: true,
   deletedBy: true,
