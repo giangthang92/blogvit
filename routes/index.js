@@ -24,6 +24,7 @@ router.get('/post/:id', async (req, res, next) => {
 
 router.get('/index/:page', async (req, res, next) => {
   try {
+    const { user } = req.session;
     const page = parseInt(req.params.page, 10) || 1;
     const pageSize = 5;
     const skipPost = (page - 1) * pageSize;
@@ -31,7 +32,7 @@ router.get('/index/:page', async (req, res, next) => {
     const countHiddenPost = await Post.countDocumentsDeleted();
     const countPost = await Post.countDocuments();
     res.render('client/page/index.ejs', {
-      post, countHiddenPost, countPost, page, pages: Math.ceil(countPost / pageSize),
+      post, countHiddenPost, countPost, page, pages: Math.ceil(countPost / pageSize), user,
     });
   } catch (error) {
     next(error);

@@ -73,10 +73,13 @@ module.exports = {
   },
 
   renderUser: async (req, res) => {
-    const userInfor = req.session.user._id;
+    const { user } = req.session;
+    if (!user) {
+      res.redirect('login');
+      return;
+    }
     const { role } = req.session.user;
-    const user = await User.findById(userInfor);
-    const post = await Post.find({ userId: userInfor });
+    const post = await Post.find({ userId: user._id });
     if (role === 'admin') {
       res.redirect('/admin/profile');
     } else {
