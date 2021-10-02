@@ -22,7 +22,7 @@ router.get('/post/:id', async (req, res, next) => {
   }
 });
 
-router.get('/index/:page', async (req, res, next) => {
+router.get('/index/:page' || '/index', async (req, res, next) => {
   try {
     const { user } = req.session;
     const page = parseInt(req.params.page, 10) || 1;
