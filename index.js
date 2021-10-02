@@ -7,6 +7,8 @@ const ejsEngine = require('ejs-mate');
 // eslint-disable-next-line no-unused-vars
 const cors = require('cors');
 
+const dotenv = require('dotenv');
+
 const session = require('express-session');
 
 const methodOverride = require('method-override');
@@ -17,7 +19,7 @@ const MongoStore = require('connect-mongo');
 
 const app = express();
 
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 const userRoutes = require('./modules/user/routes');
 
@@ -28,6 +30,8 @@ const adminRoutes = require('./modules/admin/routes');
 const clientRoutes = require('./routes/index');
 
 const commentRoutes = require('./modules/comment/routes');
+
+dotenv.config();
 
 app.use(express.static('./public'));
 
@@ -44,7 +48,7 @@ app.use(methodOverride('_method'));
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/Blog_vit', {
+    await mongoose.connect(process.env.CONNECT_MONGODB, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
@@ -60,7 +64,7 @@ const connectDB = async () => {
 connectDB();
 
 app.use(session({
-  secret: 'work hard',
+  secret: process.env.secret_session,
   resave: true,
   saveUninitialized: false,
   store: MongoStore.create({
@@ -79,4 +83,4 @@ app.use('', clientRoutes);
 
 app.use('/comment', commentRoutes);
 
-app.listen(port);
+app.listen(PORT);

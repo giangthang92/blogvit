@@ -17,7 +17,7 @@ const {
   deletePost,
 } = require('./controller');
 
-router.get('/create', checkLogin, renderCreate);
+router.get('/create', checkLogin, checkRole, renderCreate);
 
 router.get('/edit/:id', checkLogin, checkPermissionPost, renderUpdate);
 

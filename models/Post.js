@@ -32,12 +32,6 @@ const postSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
-  comment: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'comments',
-    },
-  ],
 });
 
 // Plugin mongoose-delete to hidden posts
