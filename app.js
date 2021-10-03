@@ -76,7 +76,7 @@ app.use(session({
   resave: true,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://localhost:27017/Blog_vit',
+    mongoUrl: process.env.CONNECT_MONGODB,
     ttl: 1 * 24 * 60 * 60,
   }),
 }));
