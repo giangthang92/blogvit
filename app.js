@@ -72,7 +72,7 @@ const connectDB = async () => {
 connectDB();
 
 app.use(session({
-  secret: process.env.secret_session,
+  secret: process.env.SECRET,
   resave: true,
   saveUninitialized: false,
   store: MongoStore.create({
