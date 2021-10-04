@@ -38,7 +38,7 @@
                         <button class="btn btn-primary" type="submit">Comment</button>
                     </form>
                     <% comment.forEach(function(comment, index){ %>
-                        <form name="replyComment<%=comment._id%>" action="" method="POST">
+                        
                         <div class="container mt-5">
                             <div class="d-flex justify-content-center row">
                                 <div class="col-md-8 coment-bottom ">
@@ -51,7 +51,7 @@
                                                 <p class="comment-text"><%= comment.content %></p>
                                             </div>
                                         </div>
-                                        
+                                        <form name="replyComment<%=comment._id%>" action="" method="POST"></form>
                                         <div class="bg-white p-2">
                                           <div class="d-flex flex-row fs-12">
                                               <div class="like p-2 cursor"><i class="fa fa-thumbs-o-up"></i><span class="ml-1">Like</span></div>
@@ -80,7 +80,7 @@
                                         <div id="collapse-2-<%=index%>" class="bg-light p-2 collapse" data-parent="#myGroup">
                                           <div class="d-flex flex-row align-items-start"><i class="fa fa-facebook border p-3 rounded mr-1"></i><i class="fa fa-twitter border p-3 rounded mr-1"></i><i class="fa fa-linkedin border p-3 rounded mr-1"></i><i class="fa fa-instagram border p-3 rounded mr-1"></i><i class="fa fa-dribbble border p-3 rounded mr-1"></i> <i class="fa fa-pinterest-p border p-3 rounded mr-1"></i> </div>
                                         </div>
-                                        
+                                    </form>
                                    <% comment.comments.forEach(function(e){ %>
                                     <div class="bg-light p-2 mt-1">
                                         <div class="d-flex flex-row user-info ml-5"><img class="rounded-circle" src="../../../public/upload/<%= e.userId.avatar %>" width="40">
@@ -90,7 +90,6 @@
                                             <p class="comment-text"><%= e.content %></p>
                                         </div>
                                     </div>
-                                    </form>
                                    <% }); %>
                                   </div>
                                 </div>
