@@ -22,7 +22,7 @@ router.get('/post/:id', async (req, res, next) => {
   }
 });
 
-router.get('/index/:page' || '/index', async (req, res, next) => {
+router.get('/index/:page', async (req, res, next) => {
   try {
     const { user } = req.session;
     const page = parseInt(req.params.page, 10) || 1;
@@ -37,6 +37,10 @@ router.get('/index/:page' || '/index', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+router.get('/', (req, res) => {
+  res.redirect('/index/1');
 });
 
 module.exports = router;
