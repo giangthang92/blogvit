@@ -5,10 +5,11 @@ const bodyParser = require('body-parser');
 const ejsEngine = require('ejs-mate');
 
 // eslint-disable-next-line no-unused-vars
-const cors = require('cors');
+// const cors = require('cors');
 
 const dotenv = require('dotenv');
 
+// cookie
 const session = require('express-session');
 
 const methodOverride = require('method-override');
@@ -46,14 +47,6 @@ app.use('/public', express.static('./public'));
 
 app.use(methodOverride('_method'));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-  next();
-});
-
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.CONNECT_MONGODB, {
@@ -87,8 +80,8 @@ app.use('/post', postRoutes);
 
 app.use('/admin', adminRoutes);
 
-app.use('', clientRoutes);
-
 app.use('/comment', commentRoutes);
+
+app.use('/', clientRoutes);
 
 app.listen(PORT);

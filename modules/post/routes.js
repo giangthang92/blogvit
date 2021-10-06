@@ -17,10 +17,12 @@ const {
   deletePost,
 } = require('./controller');
 
+// joi yup check form ???
 router.get('/create', checkLogin, checkRole, renderCreate);
 
 router.get('/edit/:id', checkLogin, checkPermissionPost, renderUpdate);
 
+// upload aws s3 ???
 router.post('/create', checkLogin, checkRole, upload.single('image'), createPost);
 
 router.put('/edit/:id', checkLogin, checkRole, checkPermissionPost, upload.single('image'), updatePost);

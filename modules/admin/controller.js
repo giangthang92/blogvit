@@ -64,11 +64,16 @@ module.exports = {
       const page = parseInt(req.params.page, 10) || 1;
       const pageSize = 5;
       const skipPost = (page - 1) * pageSize;
-      const post = await Post.find({}).populate('userId').skip(skipPost).limit(pageSize);
-      const countHiddenPost = await Post.countDocumentsDeleted();
-      const countPost = await Post.countDocuments();
+      const getPosts = Post.find({}).populate('userId').skip(skipPost).limit(pageSize);
+      const getCountHiddenPost = Post.countDocumentsDeleted();
+      const getCountPost = Post.countDocuments();
+
+      const [posts, countHiddenPosts, countPosts] = await Promise.all([
+        getPosts, getCountHiddenPost, getCountPost,
+      ]);
+
       res.render('admin/page/adminPostList.ejs', {
-        post, countHiddenPost, countPost, page, pages: Math.ceil(countPost / pageSize),
+        posts, countHiddenPosts, countPosts, page, pages: Math.ceil(countPosts / pageSize),
       });
     } catch (error) {
       next(error);

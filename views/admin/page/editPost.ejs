@@ -3,7 +3,7 @@
   <% layout('admin/layout') -%>
   
   <link rel="stylesheet" href="../../../public/css/avatar.css">
-<form method="POST" action="<%= post._id %>?_method=PUT" enctype="multipart/form-data">
+<form method="POST" action="post/edit/<%= post._id %>?_method=PUT" enctype="multipart/form-data">
     <div class="card-body">
       <div class="form-group">
         <label for="title">Title</label>

@@ -26,6 +26,7 @@ module.exports = {
 
   updatePost: async (req, res, next) => {
     const { id } = req.params;
+
     try {
       if (req.file) {
         await Post.updateOne({ _id: id }, {
@@ -39,6 +40,7 @@ module.exports = {
         res.redirect('/user/profile');
         return;
       }
+
       await Post.updateOne({ _id: id }, {
         $set: {
           title: req.body.title,
@@ -46,6 +48,7 @@ module.exports = {
           content: req.body.content,
         },
       });
+
       res.redirect('/user/profile');
     } catch (error) {
       next(error);
@@ -64,10 +67,12 @@ module.exports = {
     }
   },
 
+  // kiem tra du lieu id try catch
+  // kiem tra post
   renderUpdate: async (req, res) => {
     const { id } = req.params;
     const post = await Post.findById(id).lean();
-    res.render('./admin/page/editPost.ejs', { post });
+    res.render('admin/page/editPost', { post });
   },
 
   deletePost: async (req, res, next) => {
