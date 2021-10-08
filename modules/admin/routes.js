@@ -22,7 +22,12 @@ router.get('/userList', checkLogin, checkAdmin, userList);
 router.get('/editUser/:id', checkLogin, checkAdmin, renderUpdateUser);
 router.post('/posts/actionList', checkLogin, checkAdmin, formActionBtnPost);
 router.get('/hiddenPost', checkLogin, checkAdmin, hiddenPostList);
-router.post('/hiddenPost/actionList', checkLogin, checkAdmin, formActionBtnHiddenPost);
+router.post(
+  '/hiddenPost/actionList',
+  checkLogin,
+  checkAdmin,
+  formActionBtnHiddenPost
+);
 router.post('/hiddenPost/:id', checkLogin, checkAdmin, restorePost);
 router.delete('/posts/:id', checkLogin, checkAdmin, hiddenPost);
 router.delete('/hiddenPost/:id', checkLogin, checkAdmin, forceDelete);

@@ -3,15 +3,15 @@ const { Post } = require('../../models/Index');
 module.exports = {
   createPost: async (req, res, next) => {
     const { user } = req.session;
-    const {
-      title, description, content,
-    } = req.body;
+
+    const { title, description, content } = req.body;
+
     try {
       const post = new Post({
         title,
         description,
         content,
-        image: req.file.filename,
+        image: req.file.filename || null,
         userId: user._id,
       });
       await post.save();
@@ -29,25 +29,31 @@ module.exports = {
 
     try {
       if (req.file) {
-        await Post.updateOne({ _id: id }, {
-          $set: {
-            title: req.body.title,
-            description: req.body.description,
-            content: req.body.content,
-            image: req.file.filename,
-          },
-        });
+        await Post.updateOne(
+          { _id: id },
+          {
+            $set: {
+              title: req.body.title,
+              description: req.body.description,
+              content: req.body.content,
+              image: req.file.filename,
+            },
+          }
+        );
         res.redirect('/user/profile');
         return;
       }
 
-      await Post.updateOne({ _id: id }, {
-        $set: {
-          title: req.body.title,
-          description: req.body.description,
-          content: req.body.content,
-        },
-      });
+      await Post.updateOne(
+        { _id: id },
+        {
+          $set: {
+            title: req.body.title,
+            description: req.body.description,
+            content: req.body.content,
+          },
+        }
+      );
 
       res.redirect('/user/profile');
     } catch (error) {

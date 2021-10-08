@@ -3,9 +3,8 @@ const { User, Post } = require('../../models/Index.js');
 
 module.exports = {
   register: async (req, res) => {
-    const {
-      username, password, name, phone, email,
-    } = req.body;
+    const { username, password, name, phone, email } = req.body;
+
     if (!username || !password || !phone || !name || !email) {
       return res.status(400).json({
         success: false,
@@ -21,7 +20,11 @@ module.exports = {
         });
       }
       const newUser = new User({
-        username, password, name, phone, email,
+        username,
+        password,
+        name,
+        phone,
+        email,
       });
       await newUser.save();
       return res.redirect('/user/login');
@@ -91,27 +94,33 @@ module.exports = {
     const userId = req.session.user._id;
     if (!req.file) {
       try {
-        await User.updateOne({ _id: userId }, {
-          $set: {
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-          },
-        });
+        await User.updateOne(
+          { _id: userId },
+          {
+            $set: {
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+            },
+          }
+        );
         return res.redirect('profile');
       } catch (error) {
         next(error);
       }
     } else {
       try {
-        await User.updateOne({ _id: userId }, {
-          $set: {
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            avatar: req.file.filename,
-          },
-        });
+        await User.updateOne(
+          { _id: userId },
+          {
+            $set: {
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+              avatar: req.file.filename,
+            },
+          }
+        );
         return res.redirect('profile');
       } catch (error) {
         next(error);

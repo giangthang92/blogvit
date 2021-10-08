@@ -1,7 +1,6 @@
 const { User, Post } = require('../../models/Index');
 
 module.exports = {
-
   // render admin GET '/admin'
   renderAdmin: async (req, res) => {
     const userInfor = req.session.user._id;
@@ -21,29 +20,35 @@ module.exports = {
     const { id } = req.params;
     if (!req.file) {
       try {
-        await User.updateOne({ _id: id }, {
-          $set: {
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            role: req.body.role,
-          },
-        });
+        await User.updateOne(
+          { _id: id },
+          {
+            $set: {
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+              role: req.body.role,
+            },
+          }
+        );
         return res.redirect('admin/userList');
       } catch (error) {
-        next(error);
+        return next(error);
       }
     } else {
       try {
-        await User.updateOne({ _id: id }, {
-          $set: {
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            avatar: req.file.filename,
-            role: req.body.role,
-          },
-        });
+        await User.updateOne(
+          { _id: id },
+          {
+            $set: {
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+              avatar: req.file.filename,
+              role: req.body.role,
+            },
+          }
+        );
         return res.redirect('admin/userList');
       } catch (error) {
         next(error);
@@ -54,7 +59,9 @@ module.exports = {
   // render page edit user GET "/admin/editUser/:id"
   renderUpdateUser: async (req, res) => {
     const { id } = req.params;
+
     const user = await User.findById(id);
+
     res.render('./admin/page/editUser.ejs', { admin: user });
   },
 
@@ -62,18 +69,32 @@ module.exports = {
   getPosts: async (req, res, next) => {
     try {
       const page = parseInt(req.params.page, 10) || 1;
+
       const pageSize = 5;
+
       const skipPost = (page - 1) * pageSize;
-      const getPosts = Post.find({}).populate('userId').skip(skipPost).limit(pageSize);
+
+      const getPosts = Post.find({})
+        .populate('userId')
+        .skip(skipPost)
+        .limit(pageSize);
+
       const getCountHiddenPost = Post.countDocumentsDeleted();
+
       const getCountPost = Post.countDocuments();
 
       const [posts, countHiddenPosts, countPosts] = await Promise.all([
-        getPosts, getCountHiddenPost, getCountPost,
+        getPosts,
+        getCountHiddenPost,
+        getCountPost,
       ]);
 
       res.render('admin/page/adminPostList.ejs', {
-        posts, countHiddenPosts, countPosts, page, pages: Math.ceil(countPosts / pageSize),
+        posts,
+        countHiddenPosts,
+        countPosts,
+        page,
+        pages: Math.ceil(countPosts / pageSize),
       });
     } catch (error) {
       next(error);
@@ -85,7 +106,10 @@ module.exports = {
     try {
       const hiddenPost = await Post.findDeleted().populate('userId');
       const countPost = await Post.countDocuments();
-      res.render('./admin/page/hiddenPosts.ejs', { post: hiddenPost, countPost });
+      res.render('./admin/page/hiddenPosts.ejs', {
+        post: hiddenPost,
+        countPost,
+      });
     } catch (error) {
       next(error);
     }
@@ -145,7 +169,7 @@ module.exports = {
         }
         break;
       default:
-          // do nothing
+      // do nothing
     }
   },
 
@@ -161,7 +185,7 @@ module.exports = {
         }
         break;
       default:
-          // do nothing
+      // do nothing
     }
   },
 };
