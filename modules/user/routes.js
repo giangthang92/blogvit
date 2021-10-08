@@ -1,8 +1,11 @@
 const express = require('express');
 
+const router = express.Router();
+
 const { checkLogin, upload } = require('../../midleware/midleware');
 
-const router = express.Router();
+const { validateUser } = require('../../midleware/validate');
+
 const {
   register,
   formRegister,
@@ -15,7 +18,7 @@ const {
 } = require('./controller');
 
 router.get('/register', formRegister);
-router.post('/register', register);
+router.post('/register', validateUser, register);
 router.get('/login', formLogin);
 // router.get('/profile', getUser);
 router.get('/profile', renderUser);

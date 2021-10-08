@@ -1,23 +1,32 @@
+const { isValidObjectId } = require('mongoose');
+
 const { User, Post } = require('../../models/Index');
 
 module.exports = {
   // render admin GET '/admin'
   renderAdmin: async (req, res) => {
     const userInfor = req.session.user._id;
+
     const user = await User.findById(userInfor);
+
     const post = await Post.find({ userId: userInfor });
+
     res.render('./admin/page/admin.ejs', { admin: user, posts: post });
   },
 
   // render userList GET "/admin/userList"
   userList: async (req, res) => {
     const user = await User.find().populate('posts');
+
     res.render('./admin/page/userList', { admin: user });
   },
 
   // edit user by admin PUT "/admin/editUser/:id"
   updateUser: async (req, res, next) => {
     const { id } = req.params;
+
+    const result = isValidObjectId(id);
+    console.log(result);
     if (!req.file) {
       try {
         await User.updateOne(
@@ -57,12 +66,28 @@ module.exports = {
   },
 
   // render page edit user GET "/admin/editUser/:id"
-  renderUpdateUser: async (req, res) => {
-    const { id } = req.params;
+  renderUpdateUser: async (req, res, next) => {
+    try {
+      const { id } = req.params;
 
-    const user = await User.findById(id);
+      const result = isValidObjectId(id);
 
-    res.render('./admin/page/editUser.ejs', { admin: user });
+      if (!result) {
+        res.send('Error');
+        return;
+      }
+
+      const user = await User.findById(id);
+
+      if (!user) {
+        res.send('Error');
+        return;
+      }
+
+      res.render('./admin/page/editUser.ejs', { admin: user });
+    } catch (error) {
+      next(error);
+    }
   },
 
   // render Post and pagination GET "/admin/posts/:page"
@@ -83,15 +108,15 @@ module.exports = {
 
       const getCountPost = Post.countDocuments();
 
-      const [posts, countHiddenPosts, countPosts] = await Promise.all([
+      const [posts, countHiddenPost, countPosts] = await Promise.all([
         getPosts,
         getCountHiddenPost,
         getCountPost,
       ]);
 
       res.render('admin/page/adminPostList.ejs', {
-        posts,
-        countHiddenPosts,
+        post: posts,
+        countHiddenPost,
         countPosts,
         page,
         pages: Math.ceil(countPosts / pageSize),

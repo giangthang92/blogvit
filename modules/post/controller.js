@@ -20,6 +20,7 @@ module.exports = {
       next(error);
     }
   },
+
   renderCreate: (req, res) => {
     res.render('admin/page/createPost.ejs');
   },
@@ -54,7 +55,6 @@ module.exports = {
           },
         }
       );
-
       res.redirect('/user/profile');
     } catch (error) {
       next(error);
@@ -64,6 +64,7 @@ module.exports = {
   getPosts: async (req, res) => {
     try {
       const post = await Post.find().lean();
+
       res.json({ post });
     } catch (error) {
       res.json({
@@ -77,14 +78,18 @@ module.exports = {
   // kiem tra post
   renderUpdate: async (req, res) => {
     const { id } = req.params;
+
     const post = await Post.findById(id).lean();
+
     res.render('admin/page/editPost', { post });
   },
 
   deletePost: async (req, res, next) => {
     const userDelete = req.session.user.username;
+
     try {
       const { id } = req.params;
+
       await Post.delete({ _id: id }, userDelete);
       res.redirect('back');
     } catch (error) {

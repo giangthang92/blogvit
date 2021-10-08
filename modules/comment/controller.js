@@ -3,8 +3,11 @@ const { Comment } = require('../../models/Index');
 module.exports = {
   createComment: async (req, res, next) => {
     const userId = req.session.user._id;
+
     const postId = req.params.id;
+
     const { content } = req.body;
+
     try {
       const comment = new Comment({
         userId,

@@ -1,13 +1,13 @@
 const express = require('express');
 
+const router = express.Router();
+
 const {
   checkLogin,
   checkPermissionPost,
   checkRole,
   upload,
 } = require('../../midleware/midleware');
-
-const router = express.Router();
 
 const {
   createPost,
@@ -17,7 +17,8 @@ const {
   deletePost,
 } = require('./controller');
 
-// joi yup check form ???
+const { validatePost } = require('../../midleware/validate');
+
 router.get('/create', checkLogin, checkRole, renderCreate);
 
 router.get('/edit/:id', checkLogin, checkPermissionPost, renderUpdate);
@@ -28,6 +29,7 @@ router.post(
   checkLogin,
   checkRole,
   upload.single('image'),
+  validatePost,
   createPost
 );
 
@@ -37,6 +39,7 @@ router.put(
   checkRole,
   checkPermissionPost,
   upload.single('image'),
+  validatePost,
   updatePost
 );
 

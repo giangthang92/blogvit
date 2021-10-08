@@ -15,13 +15,21 @@ const {
   forceDelete,
   formActionBtnHiddenPost,
   formActionBtnPost,
+  updateUser,
 } = require('./controller');
 
 router.get('/profile', checkLogin, checkAdmin, renderAdmin);
+
 router.get('/userList', checkLogin, checkAdmin, userList);
+
 router.get('/editUser/:id', checkLogin, checkAdmin, renderUpdateUser);
+
+router.put('/editUser/:id', updateUser);
+
 router.post('/posts/actionList', checkLogin, checkAdmin, formActionBtnPost);
+
 router.get('/hiddenPost', checkLogin, checkAdmin, hiddenPostList);
+
 router.post(
   '/hiddenPost/actionList',
   checkLogin,
@@ -29,8 +37,11 @@ router.post(
   formActionBtnHiddenPost
 );
 router.post('/hiddenPost/:id', checkLogin, checkAdmin, restorePost);
+
 router.delete('/posts/:id', checkLogin, checkAdmin, hiddenPost);
+
 router.delete('/hiddenPost/:id', checkLogin, checkAdmin, forceDelete);
+
 router.get('/posts/:page', checkAdmin, getPosts);
 
 module.exports = router;
