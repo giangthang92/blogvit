@@ -13,6 +13,7 @@ const userSchema = joi.object({
   email: joi.string().email().required(),
   avatar: joi.string(),
   role: joi.string().valid(...enumRole),
+  passwordConfirmation: joi.string(),
 });
 
 module.exports = userSchema;

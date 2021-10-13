@@ -1,3 +1,5 @@
+const { isValidObjectId } = require('mongoose');
+
 const { Post } = require('../../models/Index');
 
 module.exports = {
@@ -14,19 +16,42 @@ module.exports = {
         image: req.file.filename || null,
         userId: user._id,
       });
+
       await post.save();
+
       res.redirect('/user/profile');
     } catch (error) {
       next(error);
     }
   },
 
-  renderCreate: (req, res) => {
-    res.render('admin/page/createPost.ejs');
+  renderCreate: (req, res, next) => {
+    try {
+      res.render('admin/page/createPost.ejs');
+    } catch (error) {
+      next(error);
+    }
   },
 
   updatePost: async (req, res, next) => {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      res.rener('500');
+      return;
+    }
+
+    if (!isValidObjectId(id)) {
+      res.render('404');
+      return;
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      res.render('404');
+      return;
+    }
 
     try {
       if (req.file) {
@@ -76,12 +101,26 @@ module.exports = {
 
   // kiem tra du lieu id try catch
   // kiem tra post
-  renderUpdate: async (req, res) => {
-    const { id } = req.params;
+  renderUpdate: async (req, res, next) => {
+    try {
+      const { id } = req.params;
 
-    const post = await Post.findById(id).lean();
+      if (!isValidObjectId(id)) {
+        res.render('500');
+        return;
+      }
 
-    res.render('admin/page/editPost', { post });
+      const post = await Post.findById(id).lean();
+
+      if (!post) {
+        res.render('404');
+        return;
+      }
+
+      res.render('admin/page/editPost', { post });
+    } catch (error) {
+      next(error);
+    }
   },
 
   deletePost: async (req, res, next) => {
@@ -90,7 +129,14 @@ module.exports = {
     try {
       const { id } = req.params;
 
+      const post = await Post.findById(id);
+
+      if (!post) {
+        res.render('404');
+      }
+
       await Post.delete({ _id: id }, userDelete);
+
       res.redirect('back');
     } catch (error) {
       next(error);

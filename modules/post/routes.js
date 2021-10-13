@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const { validatePost } = require('../../midleware/validate');
+
 const {
   checkLogin,
   checkPermissionPost,
@@ -16,8 +18,6 @@ const {
   renderCreate,
   deletePost,
 } = require('./controller');
-
-const { validatePost } = require('../../midleware/validate');
 
 router.get('/create', checkLogin, checkRole, renderCreate);
 
@@ -43,6 +43,12 @@ router.put(
   updatePost
 );
 
-router.delete('/:id', checkLogin, checkPermissionPost, deletePost);
+router.delete(
+  '/:id',
+  checkLogin,
+  checkPermissionPost,
+  validatePost,
+  deletePost
+);
 
 module.exports = router;

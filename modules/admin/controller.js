@@ -4,21 +4,29 @@ const { User, Post } = require('../../models/Index');
 
 module.exports = {
   // render admin GET '/admin'
-  renderAdmin: async (req, res) => {
-    const userInfor = req.session.user._id;
+  renderAdmin: async (req, res, next) => {
+    try {
+      const userInfor = req.session.user._id;
 
-    const user = await User.findById(userInfor);
+      const user = await User.findById(userInfor);
 
-    const post = await Post.find({ userId: userInfor });
+      const post = await Post.find({ userId: userInfor });
 
-    res.render('./admin/page/admin.ejs', { admin: user, posts: post });
+      res.render('admin/page/admin', { admin: user, posts: post });
+    } catch (error) {
+      next(error);
+    }
   },
 
   // render userList GET "/admin/userList"
-  userList: async (req, res) => {
-    const user = await User.find().populate('posts');
+  userList: async (req, res, next) => {
+    try {
+      const user = await User.find().populate('posts');
 
-    res.render('./admin/page/userList', { admin: user });
+      res.render('admin/page/userList', { admin: user });
+    } catch (error) {
+      next(error);
+    }
   },
 
   // edit user by admin PUT "/admin/editUser/:id"
@@ -26,7 +34,19 @@ module.exports = {
     const { id } = req.params;
 
     const result = isValidObjectId(id);
-    console.log(result);
+
+    if (!result) {
+      res.render('404');
+      return;
+    }
+
+    const user = await User.findOne({ _id: id });
+
+    if (!user) {
+      res.render('500');
+      return;
+    }
+
     if (!req.file) {
       try {
         await User.updateOne(
@@ -73,18 +93,18 @@ module.exports = {
       const result = isValidObjectId(id);
 
       if (!result) {
-        res.send('Error');
+        res.render('404');
         return;
       }
 
       const user = await User.findById(id);
 
       if (!user) {
-        res.send('Error');
+        res.render('500');
         return;
       }
 
-      res.render('./admin/page/editUser.ejs', { admin: user });
+      res.render('admin/page/editUser', { admin: user });
     } catch (error) {
       next(error);
     }
@@ -114,7 +134,7 @@ module.exports = {
         getCountPost,
       ]);
 
-      res.render('admin/page/adminPostList.ejs', {
+      res.render('admin/page/adminPostList', {
         post: posts,
         countHiddenPost,
         countPosts,
@@ -131,7 +151,7 @@ module.exports = {
     try {
       const hiddenPost = await Post.findDeleted().populate('userId');
       const countPost = await Post.countDocuments();
-      res.render('./admin/page/hiddenPosts.ejs', {
+      res.render('admin/page/hiddenPosts', {
         post: hiddenPost,
         countPost,
       });
@@ -145,6 +165,14 @@ module.exports = {
     const userDelete = req.session.user.username;
     try {
       const { id } = req.params;
+
+      const post = await Post.findById(id);
+
+      if (!post) {
+        res.render('500');
+        return;
+      }
+
       await Post.delete({ _id: id }, userDelete);
       res.redirect('back');
     } catch (error) {
@@ -155,6 +183,14 @@ module.exports = {
   // delete post DELETE "/admin/hiddenPost/:id"
   forceDelete: async (req, res, next) => {
     const { id } = req.params;
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      res.render('500');
+      return;
+    }
+
     try {
       await Post.deleteOne({ _id: id });
       res.redirect('back');
@@ -166,6 +202,14 @@ module.exports = {
   // restore post POST "/admin/hiddenPost/:id"
   restorePost: async (req, res, next) => {
     const { id } = req.params;
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      res.render('500');
+      return;
+    }
+
     try {
       await Post.restore({ _id: id });
       res.redirect('back');

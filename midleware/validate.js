@@ -11,7 +11,7 @@ module.exports = {
     if (!valid.error) {
       return next();
     }
-    res.json(valid.error.details[0].message);
+    res.render('500');
   },
 
   validateComment: (req, res, next) => {
@@ -20,7 +20,7 @@ module.exports = {
     if (!valid.error) {
       return next();
     }
-    res.json(valid.error.details[0].message);
+    res.render('500');
   },
 
   validatePost: (req, res, next) => {
@@ -29,6 +29,6 @@ module.exports = {
     if (!valid.error) {
       return next();
     }
-    res.json(valid.error.details[0].message);
+    res.render('500');
   },
 };
