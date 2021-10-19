@@ -79,4 +79,8 @@ app.use('/comment', commentRoutes);
 
 app.use('/', clientRoutes);
 
+app.get('/test', (req, res) => {
+  res.render('test');
+});
+
 app.listen(PORT);

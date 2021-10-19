@@ -8,14 +8,25 @@ module.exports = {
 
     const { title, description, content } = req.body;
 
+    let post;
     try {
-      const post = new Post({
-        title,
-        description,
-        content,
-        image: req.file.filename || null,
-        userId: user._id,
-      });
+      if (req.file) {
+        post = new Post({
+          title,
+          description,
+          content,
+          image: req.file.filename,
+          userId: user._id,
+        });
+      } else {
+        post = new Post({
+          title,
+          description,
+          content,
+          image: 'avatar.jpg',
+          userId: user._id,
+        });
+      }
 
       await post.save();
 

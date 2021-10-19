@@ -22,13 +22,7 @@ router.post('/register', validateUser, register);
 router.get('/login', formLogin);
 // router.get('/profile', getUser);
 router.get('/profile', renderUser);
-router.post('/login', validateUser, login);
-router.put(
-  '/edit',
-  checkLogin,
-  upload.single('avatar'),
-  validateUser,
-  updateUser
-);
+router.post('/login', login);
+router.put('/edit', checkLogin, upload.single('avatar'), updateUser);
 router.get('/logout', logout);
 module.exports = router;

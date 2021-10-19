@@ -28,7 +28,7 @@ router.put('/editUser/:id', updateUser);
 
 router.post('/posts/actionList', checkLogin, checkAdmin, formActionBtnPost);
 
-router.get('/hiddenPost', checkLogin, checkAdmin, hiddenPostList);
+router.patch('/hiddenPost/:id', checkLogin, checkAdmin, restorePost);
 
 router.post(
   '/hiddenPost/actionList',
@@ -36,11 +36,12 @@ router.post(
   checkAdmin,
   formActionBtnHiddenPost
 );
-router.post('/hiddenPost/:id', checkLogin, checkAdmin, restorePost);
 
 router.delete('/posts/:id', checkLogin, checkAdmin, hiddenPost);
 
 router.delete('/hiddenPost/:id', checkLogin, checkAdmin, forceDelete);
+
+router.get('/hiddenPost', checkLogin, checkAdmin, hiddenPostList);
 
 router.get('/posts/:page', checkAdmin, getPosts);
 

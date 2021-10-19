@@ -60,7 +60,7 @@ module.exports = {
         });
       }
       req.session.user = user;
-      res.redirect('/user/profile');
+      res.redirect('/');
     } catch (error) {
       next(error);
     }

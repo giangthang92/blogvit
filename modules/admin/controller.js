@@ -184,7 +184,7 @@ module.exports = {
   forceDelete: async (req, res, next) => {
     const { id } = req.params;
 
-    const post = await Post.findById(id);
+    const post = await Post.findOneDeleted({ _id: id });
 
     if (!post) {
       res.render('500');
@@ -202,15 +202,12 @@ module.exports = {
   // restore post POST "/admin/hiddenPost/:id"
   restorePost: async (req, res, next) => {
     const { id } = req.params;
-
-    const post = await Post.findById(id);
-
-    if (!post) {
-      res.render('500');
-      return;
-    }
-
     try {
+      const post = await Post.findOneDeleted({ _id: id });
+      if (!post) {
+        res.render('500');
+        return;
+      }
       await Post.restore({ _id: id });
       res.redirect('back');
     } catch (error) {
@@ -247,7 +244,8 @@ module.exports = {
     switch (req.body.action) {
       case 'hidden':
         try {
-          await Post.delete({ _id: { $in: req.body.postIds } });
+          const userDelete = req.session.user.username;
+          await Post.delete({ _id: { $in: req.body.postIds } }, userDelete);
           res.redirect('back');
         } catch (error) {
           next(error);

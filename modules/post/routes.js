@@ -43,12 +43,6 @@ router.put(
   updatePost
 );
 
-router.delete(
-  '/:id',
-  checkLogin,
-  checkPermissionPost,
-  validatePost,
-  deletePost
-);
+router.delete('/:id', checkLogin, checkPermissionPost, deletePost);
 
 module.exports = router;

@@ -1,22 +1,23 @@
-
-  <!-- daterange picker -->
-  <% layout('admin/layout') -%>
-  
-  <link rel="stylesheet" href="../../../public/css/avatar.css">
-<form method="POST" action="post/edit/<%= post._id %>?_method=PUT" enctype="multipart/form-data">
+ <% layout('admin/layout') -%>
+ 
+<link rel="stylesheet" href="../../../public/css/avatar.css">
+<form method="POST" action="/post/edit/<%= post._id %>?_method=PUT" enctype="multipart/form-data" id="form-1">
     <div class="card-body">
       <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" value="<%= post.title %>" class="form-control" id="title" name="title" placeholder="Enter title">
+        <input type="text" value="<%= post.title %>" rules="required" class="form-control" id="title" name="title" placeholder="Enter title">
+        <span class="form-message"></span>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" value="<%= post.description %>" class="form-control" id="description" name="description" placeholder="Enter description">
+        <input type="text" value="<%= post.description %>" rules="required" class="form-control" id="description" name="description" placeholder="Enter description">
+        <span class="form-message"></span>
       </div>
       
       <div class="form-group">
         <label for="content">Content</label>
-        <textarea class="form-control" rows="6" name="content" value="post.Content" ><%= post.content %></textarea>
+        <textarea class="form-control" rows="6" name="content" rules="required" value="post.Content" ><%= post.content %></textarea>
+        <span class="form-message"></span>
       </div>
       <div class="form-group">
         <label for="avatar" class="col-sm-2 col-form-label">Image</label>
@@ -42,4 +43,8 @@
     var image = document.getElementById('output');
     image.src = URL.createObjectURL(event.target.files[0]);
   };
-  </script>
+</script>
+<script src="../../public/client/js/validator.js"></script>
+<script>
+    Validator('#form-1')
+</script>

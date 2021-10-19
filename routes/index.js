@@ -60,6 +60,10 @@ router.get('/index/:page', async (req, res, next) => {
   }
 });
 
+router.get('/about', (req, res) => {
+  res.render('client/page/about', { user: req.session.user });
+});
+
 router.get('/', (req, res) => {
   res.redirect('/index/1');
 });

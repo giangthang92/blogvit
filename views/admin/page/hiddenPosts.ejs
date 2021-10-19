@@ -1,7 +1,6 @@
 <% layout('admin/layout') -%>
-    <!-- <base href="http://localhost:3000/"> -->
     <!-- Default box -->
-    <form name="container-form" action="admin/hiddenPost/actionList" method="POST">
+    <form name="container-form" action="/admin/hiddenPost/actionList" method="POST">
         <div class="d-flex mb-3 align-items-center">
             <div class="form-check ml-4">
                 <input class="form-check-input" type="checkbox" value="" id="check-all">
@@ -29,7 +28,7 @@
                             </th>
                             <th style="width: 40%">
                                 Hidden Post List
-                                <a class="btn btn-danger btn-sm ml-4"  href="admin/posts/1">
+                                <a class="btn btn-danger btn-sm ml-4"  href="/admin/posts/1">
                                     <i class="fas fa-trash">
                                     </i>    
                                     Post List (<%= countPost %>)
@@ -132,7 +131,7 @@
             restoreBtn.click(function(e) {
                 e.preventDefault();
                 var postId = $(this).data('id')
-                restoreForm.action = 'admin/hiddenPost/' + postId + '?_menthod=PATCH';
+                restoreForm.action = '/admin/hiddenPost/' + postId + '?_method=PATCH';
                 restoreForm.submit();
             });
 
@@ -176,7 +175,7 @@
         });
         var btndelete = document.getElementById('btn-delete-post')
         btndelete.onclick = function () {
-        deletePost.action = "admin/hiddenPost/" + postId + "?_method=DELETE";
+        deletePost.action = "/admin/hiddenPost/" + postId + "?_method=DELETE";
         deletePost.submit();
         }
         });

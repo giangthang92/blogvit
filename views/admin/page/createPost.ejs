@@ -1,21 +1,31 @@
 <% layout('admin/layout') -%>
-<!-- <base href="http://localhost:3000/"> -->
 <link rel="stylesheet" href="../../../public/css/avatar.css">
+<!-- <style>
+  .form-group.invalid .form-control {
+  border-color: #f33a58;
+}
+.form-group.invalid .form-message {
+  color: #f33a58;
+}
+</style> -->
 <div>
-  <form method="POST" action="post/create" enctype="multipart/form-data">
+  <form method="POST" action="/post/create" enctype="multipart/form-data" id="form-create">
     <div class="card-body">
-      <div class="form-group">
+      <div class="form-group" >
         <label for="title">Title</label>
-        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+        <input type="text" class="form-control" id="title" name="title" rules="required" placeholder="Enter title">
+        <span class="form-message"></span>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" class="form-control" id="description" name="description" placeholder="Enter description">
+        <input type="text" class="form-control" id="description" rules="required" name="description" placeholder="Enter description">
+        <span class="form-message"></span>
       </div>
       
       <div class="form-group">
         <label for="content">Content</label>
-        <textarea class="form-control" rows="10" name="content" placeholder="Write your content ...."></textarea>
+        <textarea class="form-control" rows="10" rules="required" name="content" placeholder="Write your content ...."></textarea>
+        <span class="form-message"></span>
       </div>
 
     
@@ -44,3 +54,8 @@
 	image.src = URL.createObjectURL(event.target.files[0]);
 };
  </script>
+
+<script src="../../../public/client/js/validator.js"></script>
+<script>
+    Validator('#form-create')
+</script>

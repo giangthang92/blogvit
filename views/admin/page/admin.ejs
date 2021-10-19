@@ -73,7 +73,7 @@
                   <div class="post">
                     <div class="user-block">
                         <h1> <%= post.title %> </h1>
-                        <a href="http://localhost:3000/post/edit/<%= post._id %>" class="float-right btn-tool"><i class="fas fa-edit mr-1"></i></a>
+                        <a href="/post/edit/<%= post._id %>" class="float-right btn-tool"><i class="fas fa-edit mr-1"></i></a>
                         <a href="" class="float-right btn-tool" data-toggle="modal" data-id="<%= post._id %>" data-target="#delete-post"> <i class="fas fa-times"></i></a>
                       </span>
                       <span class="description"><%= post.createdAt %></span>
@@ -92,7 +92,7 @@
 
 
                 <div>
-                  <a class="btn btn-block btn-primary" href="post/create" role="button">Create new post</a>
+                  <a class="btn btn-block btn-primary" href="/post/create" role="button">Create new post</a>
                 </div>
 
                 <div id="delete-post" class="modal" tabindex="-1" role="dialog">
@@ -126,7 +126,7 @@
                   });
                   var btndelete = document.getElementById('btn-delete-post')
                   btndelete.onclick = function () {
-                    deletePost.action = "post/" + postId + "?_method=DELETE";
+                    deletePost.action = "/post/" + postId + "?_method=DELETE";
                     deletePost.submit();
                   }
                   });
@@ -135,7 +135,7 @@
               </div>
               
               <div class="tab-pane" id="settings">
-                <form  method="POST" action="user/edit?_method=PUT" class="form-horizontal" enctype="multipart/form-data">
+                <form  method="POST" action="/user/edit?_method=PUT" class="form-horizontal" enctype="multipart/form-data">
                   <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
@@ -178,7 +178,6 @@
     </div>
   </div>
 </section>
-</div>
 
 <script>
 var loadFile = function(event) {
