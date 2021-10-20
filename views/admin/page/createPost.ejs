@@ -1,13 +1,6 @@
 <% layout('admin/layout') -%>
 <link rel="stylesheet" href="../../../public/css/avatar.css">
-<!-- <style>
-  .form-group.invalid .form-control {
-  border-color: #f33a58;
-}
-.form-group.invalid .form-message {
-  color: #f33a58;
-}
-</style> -->
+
 <div>
   <form method="POST" action="/post/create" enctype="multipart/form-data" id="form-create">
     <div class="card-body">
@@ -24,7 +17,7 @@
       
       <div class="form-group">
         <label for="content">Content</label>
-        <textarea class="form-control" rows="10" rules="required" name="content" placeholder="Write your content ...."></textarea>
+        <textarea class="form-control" rows="10" rules="required" name="content" id="summernote" placeholder="Write your content ...."></textarea>
         <span class="form-message"></span>
       </div>
 
@@ -49,12 +42,11 @@
   </form>
 </div>
  <script>
-   var loadFile = function(event) {
+  var loadFile = function(event) {
 	var image = document.getElementById('output');
 	image.src = URL.createObjectURL(event.target.files[0]);
 };
  </script>
-
 <script src="../../../public/client/js/validator.js"></script>
 <script>
     Validator('#form-create')

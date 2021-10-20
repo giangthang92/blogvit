@@ -22,7 +22,7 @@
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
-                    <%= post.content %>
+                    <%- post.content %>
 
                 <p>
                     Writer
@@ -98,7 +98,7 @@
                                             <div class="d-flex flex-column justify-content-start ml-1"><span class="d-block font-weight-bold name"><%= e.userId.name %></span><span class="date text-black-50"><%= e.createdAt %></span></div>
                                         </div>
                                         <div class="mt-2 ml-5">
-                                            <p class="comment-text"><%= e.content %></p>
+                                            <p class="comment-text"><%- e.content %></p>
                                         </div>
                                     </div>
                                    <% }); %>
@@ -127,4 +127,5 @@
             });
         });
    </script>
+   <script src="/public/summernote-0.8.18-dist/summernote-bs4.min.js"></script>
    
