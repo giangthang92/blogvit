@@ -23,6 +23,7 @@ module.exports = {
     try {
       const user = await User.find().populate('posts');
 
+      // res.json(user);
       res.render('admin/page/userList', { admin: user });
     } catch (error) {
       next(error);
@@ -30,7 +31,7 @@ module.exports = {
   },
 
   // edit user by admin PUT "/admin/editUser/:id"
-  updateUser: async (req, res, next) => {
+  adminUpdateUser: async (req, res, next) => {
     const { id } = req.params;
 
     const result = isValidObjectId(id);
@@ -47,41 +48,36 @@ module.exports = {
       return;
     }
 
-    if (!req.file) {
-      try {
+    try {
+      if (!req.file) {
         await User.updateOne(
           { _id: id },
           {
             $set: {
               name: req.body.name,
+              role: req.body.role,
               email: req.body.email,
               phone: req.body.phone,
-              role: req.body.role,
             },
           }
         );
-        return res.redirect('admin/userList');
-      } catch (error) {
-        return next(error);
-      }
-    } else {
-      try {
+      } else {
         await User.updateOne(
           { _id: id },
           {
             $set: {
               name: req.body.name,
+              role: req.body.role,
               email: req.body.email,
               phone: req.body.phone,
               avatar: req.file.filename,
-              role: req.body.role,
             },
           }
         );
-        return res.redirect('admin/userList');
-      } catch (error) {
-        next(error);
       }
+      res.redirect('/admin/userList');
+    } catch (error) {
+      next(error);
     }
   },
 

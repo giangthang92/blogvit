@@ -92,6 +92,7 @@ module.exports = {
 
   updateUser: async (req, res, next) => {
     const userId = req.session.user._id;
+
     if (!req.file) {
       try {
         await User.updateOne(
@@ -104,7 +105,7 @@ module.exports = {
             },
           }
         );
-        return res.redirect('profile');
+        return res.redirect('/user/profile');
       } catch (error) {
         next(error);
       }
@@ -121,7 +122,7 @@ module.exports = {
             },
           }
         );
-        return res.redirect('profile');
+        return res.redirect('/user/profile');
       } catch (error) {
         next(error);
       }

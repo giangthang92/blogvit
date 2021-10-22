@@ -17,7 +17,7 @@
       
       <div class="form-group">
         <label for="content">Content</label>
-        <textarea class="form-control" rows="10" rules="required" name="content" id="summernote" placeholder="Write your content ...."></textarea>
+        <textarea class="form-control" rows="15" name="content" id="editor" placeholder="Write your content ...."></textarea>
         <span class="form-message"></span>
       </div>
 
@@ -50,4 +50,14 @@
 <script src="../../../public/client/js/validator.js"></script>
 <script>
     Validator('#form-create')
+</script>
+<script src="/public/ckeditor/ckeditor.js"></script>
+
+<script>
+  CKEDITOR.replace('editor', {
+    extraPlugins:'filebrowser',
+        filebrowserBrowseUrl:'/list',//upload location
+        filebrowserUploadMethod:'form',
+        filebrowserUploadUrl:'/upload'//route
+  })
 </script>

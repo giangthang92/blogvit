@@ -16,7 +16,6 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
 
-  <link rel="stylesheet" href="/public/summernote-0.8.18-dist/summernote.css">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -96,10 +95,18 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link">
-            <i class="bi bi-box-arrow-left mr-2"></i>
+            <a href="/user/profile" class="nav-link">
+            <i class=""></i>
               <p>
                 Dashboard
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/userList" class="nav-link">
+            <i class=""></i>
+              <p>
+                UserList
               </p>
             </a>
           </li>
@@ -136,7 +143,6 @@
 
 </div>
 <!-- ./wrapper -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" ></script>
 <!-- jQuery -->
 <script src="../../public/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -145,11 +151,5 @@
 <script src="../../public/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../public/dist/js/demo.js"></script>
-<script src="/public/summernote-0.8.18-dist/summernote.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {     
-    $('#summernote').summernote();
-});
-</script>
 </body>
 </html>

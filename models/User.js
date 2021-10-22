@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const { Schema } = mongoose;
 
-const UserSchema = new Schema(
+const userSchema = new Schema(
   {
     username: {
       type: String,
@@ -50,7 +50,7 @@ const UserSchema = new Schema(
 );
 
 // Get posts with userId
-UserSchema.virtual('posts', {
+userSchema.virtual('posts', {
   ref: 'posts',
   foreignField: 'userId',
   localField: '_id',
@@ -58,7 +58,7 @@ UserSchema.virtual('posts', {
 
 // hash and comparePassword
 // eslint-disable-next-line func-names
-UserSchema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
   const user = this;
   if (!user.isModified('password')) return next();
   bcrypt.hash(user.password, 10, (err, hash) => {
@@ -69,10 +69,10 @@ UserSchema.pre('save', function (next) {
     next();
   });
 });
-UserSchema.methods.comparePassword = function comparePassword(
+userSchema.methods.comparePassword = function comparePassword(
   candidatePassword
 ) {
   return bcrypt.compareSync(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model('users', UserSchema);
+module.exports = mongoose.model('users', userSchema);

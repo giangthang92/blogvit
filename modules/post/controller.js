@@ -47,13 +47,10 @@ module.exports = {
   updatePost: async (req, res, next) => {
     const { id } = req.params;
 
-    if (!isValidObjectId(id)) {
-      res.rener('500');
-      return;
-    }
+    console.log(req.body);
 
     if (!isValidObjectId(id)) {
-      res.render('404');
+      res.rener('500');
       return;
     }
 
